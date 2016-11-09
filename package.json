@@ -1,0 +1,40 @@
+{
+  "name": "webpack-disk-plugin",
+  "version": "0.0.1",
+  "description": "Webpack disk plugin",
+  "main": "lib/index.js",
+  "dependencies": {
+    "async": "^2.1.2",
+    "fs-extra": "^1.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^2.13.1",
+    "eslint-config-formidable": "^2.0.1",
+    "eslint-plugin-filenames": "^1.1.0",
+    "eslint-plugin-import": "^1.16.0",
+    "rimraf": "^2.5.4",
+    "webpack": "^1.13.3",
+    "webpack-dev-server": "^1.16.2",
+    "webpack-stats-plugin": "^0.1.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FormidableLabs/webpack-disk-plugin"
+  },
+  "keywords": [
+    "webpack"
+  ],
+  "author": "Ryan Roemer <ryan.roemer@formidablelabs.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/FormidableLabs/webpack-disk-plugin/issues"
+  },
+  "scripts": {
+    "build-demo-wp": "npm run clean && cd demo && webpack",
+    "build-demo-wds": "npm run clean && cd demo && webpack-dev-server",
+    "test": "bash test/verify-builds.sh",
+    "lint": "eslint lib demo/*.js",
+    "check": "npm run lint && npm run test",
+    "clean": "rimraf demo/stats.json demo/build*"
+  }
+}
