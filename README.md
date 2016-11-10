@@ -20,29 +20,51 @@ The plugin is available via [npm](https://www.npmjs.com/package/webpack-disk-plu
 $ npm install --save webpack-disk-plugin
 ```
 
-## Examples
+## Usage
 
-You can see lots of examples at
-[`demo/webpack.config.js`](demo/webpack.config.js).
+The plugin hooks in to the
+[`after-emit`](https://webpack.github.io/docs/plugins.html#after-emit-async)
+event and writes any specified assets to the real underlying file system.
 
-### Basic
+### Options
 
-Options:
+* `output.path`: The base directory to write assets to. (Default: `"."`).
+* `files`: An array of objects to map an asset to a file path
 
-* `output.path`: The base directory to write assets to.
-* `files`: An array of objects to map an asset to a file path. For each item:
-    * `asset`: A regex or string to match the name in the webpack compiler.
-      Note that something like `[hash].main.js` will be _fully expanded_ to
-      something like `e49186041feacefb583b.main.js`.
-    * `output`: An object with additional options:
-        * `path`: Override the top-level `output.path` directory to write too.
-        * `filename`: A specified filename to write to. Can be a straight string
-          or a function that gets the asset name to further mutate.
+The `files` array is composed of objects of the form:
 
-Notes:
+* `asset`: A regex or string to match the name in the webpack compiler.
+  Note that something like `[hash].main.js` will be _fully expanded_ to
+  something like `e49186041feacefb583b.main.js`.
+* `output`: An object with additional options:
+    * `path`: Override the top-level `output.path` directory to write too.
+    * `filename`: A specified filename to write to. Can be a straight string
+      or a function that gets the asset name to further mutate. Also may be
+      a single filename, a relative path to append to the base `path`, or an
+      absolute path.
+
+### Notes
 
 * **Can only have 1 unique output path**: 2+ files cannot target the same full
   file path. At the same time, you _can_ have 2+ _input_ asset matches.
+
+## Examples
+
+Additional examples are provided in:
+[`demo/webpack.config.js`](demo/webpack.config.js). If you have a clone of this
+repository with `devDependencies`, you can run:
+
+```sh
+# Output using `webpack`
+$ npm run build-demo-wp
+
+# Output using `webpack-dev-server`
+$ npm run build-demo-wds
+```
+
+and see the results in the [`demo`](demo) directory.
+
+### Basic
 
 Here's a basic use case that copies and renames one file.
 
@@ -67,6 +89,7 @@ module.exports = {
 }
 ```
 
+### Advanced
 
 Here's an advanced use case that has nested directories and functionally renames
 files:
@@ -87,7 +110,9 @@ module.exports = {
           asset: /[a-f0-9]{20}\.main\.js/,
           output: {
             // Custom namer: invert the hash.
-            filename: function (name) { return "main." + name.match(/[a-f0-9]{20}/)[0] + ".js"; }
+            filename: function (name) {
+              return "main." + name.match(/[a-f0-9]{20}/)[0] + ".js";
+            }
           }
         }
       ]

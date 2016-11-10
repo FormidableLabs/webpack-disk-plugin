@@ -38,7 +38,7 @@ module.exports = {
     new DiskPlugin({ // build-2/
       output: { path: "build-2" },
       files: [
-        { asset: "stats.json" },
+        { asset: "stats.json", output: { filename: path.join(__dirname, "build-2/stats.json") } },
         { asset: /[a-f0-9]{20}\.main\.js/, output: { path: "build-2" } },
         { asset: /[a-f0-9]{20}\.main\.js/, output: { filename: "copy.js" } }
       ]
@@ -59,7 +59,9 @@ module.exports = {
           asset: /[a-f0-9]{20}\.main\.js/,
           output: {
             // Custom namer: invert the hash.
-            filename: function (name) { return "main." + name.match(/[a-f0-9]{20}/)[0] + ".js"; }
+            filename: function (name) {
+              return "main." + name.match(/[a-f0-9]{20}/)[0] + ".js";
+            }
           }
         }
       ]
